@@ -32,7 +32,7 @@ public class Ticket {
     @Column(name = "modified_at")
     private LocalDateTime modifiedTime;
 
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> comments;
 

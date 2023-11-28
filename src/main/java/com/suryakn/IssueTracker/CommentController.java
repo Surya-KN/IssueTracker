@@ -27,4 +27,10 @@ public class CommentController {
     public List<Comment> all(@PathVariable Long ticketid) {
         return commentRepository.findByTicket_Id(ticketid);
     }
+
+//    @DeleteMapping
+//    TODO: delete individual comment
+//    public void deleteComment(@PathVariable Long ticketid) {
+//        commentRepository.
+//    }
 }
