@@ -9,18 +9,16 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tickets")
 public class Ticket {
+    private static final Logger log = LoggerFactory.getLogger(IssueTrackerApplication.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String title;
     private String description;
     private String status;
@@ -31,10 +29,19 @@ public class Ticket {
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedTime;
-
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> comments;
+
+    protected Ticket() {
+    }
+
+    public Ticket(String title, String description, String status, String priority) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+    }
 
     @Override
     public String toString() {
@@ -48,44 +55,6 @@ public class Ticket {
                 ", modifiedTime=" + modifiedTime +
                 ", comments=" + comments +
                 '}';
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(IssueTrackerApplication.class);
-
-    protected Ticket() {
-    }
-
-    public Ticket(Long id, String title, String description, String status, String priority, LocalDateTime createdTime, LocalDateTime modifiedTime, List<Comment> comments) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.priority = priority;
-        this.createdTime = createdTime;
-        this.modifiedTime = modifiedTime;
-        this.comments = comments;
-    }
-
-    public Ticket(String title, String description, String status, String priority) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.priority = priority;
-    }
-
-    public Ticket(String title, String description, String status, String priority, List<String> commentsList) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.priority = priority;
-        List<Comment> comments = new ArrayList<>();
-        log.info(commentsList.toString());
-        for (String comment :
-                commentsList) {
-            comments.add(new Comment(comment, this));
-        }
-        log.info(comments.toString());
-        this.comments = comments;
     }
 
     public LocalDateTime getCreatedTime() {

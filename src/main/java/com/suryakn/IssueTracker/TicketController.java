@@ -8,11 +8,9 @@ import java.util.List;
 @RequestMapping("/api/tickets")
 public class TicketController {
     private final TicketRepository ticketRepository;
-    private final CommentRepository commentRepository;
 
-    TicketController(TicketRepository ticketRepository, CommentRepository commentRepository) {
+    TicketController(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
-        this.commentRepository = commentRepository;
     }
 
     @GetMapping
@@ -46,7 +44,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
-//    @Transactional
+//    @Transactional like automic operation
     public void deleteTicket(@PathVariable Long id) {
 //        commentRepository.deleteAllByTicket_Id(id);
         ticketRepository.deleteById(id);
