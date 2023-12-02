@@ -1,60 +1,53 @@
 package com.suryakn.IssueTracker.controller;
 
 import com.suryakn.IssueTracker.entity.Ticket;
-import com.suryakn.IssueTracker.repository.TicketRepository;
+import com.suryakn.IssueTracker.service.TicketService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("api/tickets")
 public class TicketController {
-    private final TicketRepository ticketRepository;
 
-    TicketController(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
+    private final TicketService ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
 
     @GetMapping
-    List<Ticket> all() {
-        return ticketRepository.findAll();
+    public ResponseEntity<List<Ticket>> all() {
+        return ticketService.getAllTickets();
     }
 
-    @GetMapping("/{id}")
-    Ticket ticketWithId(@PathVariable Long id) {
-        return ticketRepository.findById(id).orElseThrow();
+    @GetMapping("{id}")
+    public ResponseEntity<Ticket> ticketWithId(@PathVariable Long id) {
+        return ticketService.getTicketById(id);
     }
 
     @PostMapping
-    Ticket addTicket(@RequestBody Ticket newTicket) {
+    public ResponseEntity<Ticket> addTicket(@RequestBody Ticket newTicket) {
 //        newTicket.setCreated_at(LocalDateTime.now());
 //        newTicket.setModified_at(LocalDateTime.now());
-        return ticketRepository.save(newTicket);
+        return ticketService.addTicket(newTicket);
     }
 
-    @PutMapping("/{id}")
-    Ticket replaceTicket(@RequestBody Ticket newTicket, @PathVariable Long id) {
-        return ticketRepository.findById(id).map(ticket -> {
-            ticket.setTitle(newTicket.getTitle());
-            ticket.setStatus(newTicket.getStatus());
-            ticket.setDescription(newTicket.getDescription());
-            ticket.setPriority(newTicket.getPriority());
-//            ticket.setModified_at(LocalDateTime.now());
-            return ticketRepository.save(ticket);
-        }).orElseThrow();
+    @PutMapping("{id}")
+    public ResponseEntity<Ticket> replaceTicket(@RequestBody Ticket newTicket, @PathVariable Long id) {
+        return ticketService.updateTicket(newTicket, id);
 
     }
 
-    //    @PatchMapping("/{id}")
+    //    @PatchMapping("/{id}") TODO: if possible
 //    Ticket updateTicket(@PathVariable Long id, @RequestBody Map<String, String> body) {
 //        body.forEach((key,value) -> {
 //            any
 //        });
 //    }
-    @DeleteMapping("/{id}")
-//    @Transactional like atomic operation
+    @DeleteMapping("{id}")
     public void deleteTicket(@PathVariable Long id) {
-//        commentRepository.deleteAllByTicket_Id(id);
-        ticketRepository.deleteById(id);
+        ticketService.deleteTicket(id);
     }
 }
