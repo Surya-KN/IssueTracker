@@ -1,5 +1,9 @@
-package com.suryakn.IssueTracker;
+package com.suryakn.IssueTracker.controller;
 
+import com.suryakn.IssueTracker.entity.Comment;
+import com.suryakn.IssueTracker.entity.Ticket;
+import com.suryakn.IssueTracker.repository.CommentRepository;
+import com.suryakn.IssueTracker.repository.TicketRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

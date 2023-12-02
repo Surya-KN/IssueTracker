@@ -1,5 +1,7 @@
-package com.suryakn.IssueTracker;
+package com.suryakn.IssueTracker.controller;
 
+import com.suryakn.IssueTracker.entity.Ticket;
+import com.suryakn.IssueTracker.repository.TicketRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,8 +45,14 @@ public class TicketController {
 
     }
 
+    //    @PatchMapping("/{id}")
+//    Ticket updateTicket(@PathVariable Long id, @RequestBody Map<String, String> body) {
+//        body.forEach((key,value) -> {
+//            any
+//        });
+//    }
     @DeleteMapping("/{id}")
-//    @Transactional like automic operation
+//    @Transactional like atomic operation
     public void deleteTicket(@PathVariable Long id) {
 //        commentRepository.deleteAllByTicket_Id(id);
         ticketRepository.deleteById(id);

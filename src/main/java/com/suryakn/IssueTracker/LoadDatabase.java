@@ -1,5 +1,9 @@
 package com.suryakn.IssueTracker;
 
+import com.suryakn.IssueTracker.entity.Comment;
+import com.suryakn.IssueTracker.entity.Ticket;
+import com.suryakn.IssueTracker.repository.CommentRepository;
+import com.suryakn.IssueTracker.repository.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
