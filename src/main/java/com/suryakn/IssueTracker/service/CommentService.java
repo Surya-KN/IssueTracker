@@ -33,6 +33,11 @@ public class CommentService {
     }
 
     public ResponseEntity<List<Comment>> getAllComments(Long ticketId) {
-        return new ResponseEntity<>(commentRepository.findByTicket_Id(ticketId), HttpStatus.OK);
+        Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
+        if (optionalTicket.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(commentRepository.findByTicket_Id(ticketId), HttpStatus.OK);
+        }
     }
 }
