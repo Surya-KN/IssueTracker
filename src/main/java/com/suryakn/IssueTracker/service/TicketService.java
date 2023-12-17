@@ -21,7 +21,8 @@ public class TicketService {
 
 
     public ResponseEntity<List<Ticket>> getAllTickets() {
-        return new ResponseEntity<>(ticketRepository.findAll(), HttpStatus.OK);
+//        return new ResponseEntity<>(ticketRepository.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok(ticketRepository.findAll());
     }
 
 
