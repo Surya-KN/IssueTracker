@@ -2,6 +2,7 @@ package com.suryakn.IssueTracker.controller;
 
 import com.suryakn.IssueTracker.entity.Comment;
 import com.suryakn.IssueTracker.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,14 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api/tickets/{ticketId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
-
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Comment>> all(@PathVariable Long ticketId) {

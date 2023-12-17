@@ -2,6 +2,7 @@ package com.suryakn.IssueTracker.service;
 
 import com.suryakn.IssueTracker.entity.Ticket;
 import com.suryakn.IssueTracker.repository.TicketRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,15 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService {
 
 
     private final TicketRepository ticketRepository;
-
-    public TicketService(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
-
 
     public ResponseEntity<List<Ticket>> getAllTickets() {
 //        return new ResponseEntity<>(ticketRepository.findAll(), HttpStatus.OK);
