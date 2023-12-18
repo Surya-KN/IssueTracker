@@ -30,6 +30,12 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    List<Ticket> tickets;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

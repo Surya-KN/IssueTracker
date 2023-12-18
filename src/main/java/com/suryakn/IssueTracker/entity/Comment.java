@@ -25,6 +25,12 @@ public class Comment {
     @JsonBackReference
     private Ticket ticket;
 
+    //    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn
+//    private UserEntity user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserEntity user;
+
     public Comment(String comment, Ticket ticket) {
         this.comment = comment;
         this.ticket = ticket;

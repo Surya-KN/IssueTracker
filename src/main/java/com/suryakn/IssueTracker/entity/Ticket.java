@@ -43,6 +43,8 @@ public class Ticket {
     @JsonManagedReference
     private List<Comment> comments;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserEntity user;
 
     public Ticket(String title, String description, String status, String priority) {
         this.title = title;
