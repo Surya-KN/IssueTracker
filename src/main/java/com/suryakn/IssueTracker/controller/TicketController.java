@@ -29,7 +29,7 @@ public class TicketController {
 
     @PostMapping("{ticketId}/assign")
     public void assignTicket(@PathVariable Long ticketId, @RequestBody AssignRequest assignRequest) {
-        ticketService.assignTicker(ticketId, assignRequest);
+        ticketService.assignTicket(ticketId, assignRequest);
     }
 
     @PostMapping

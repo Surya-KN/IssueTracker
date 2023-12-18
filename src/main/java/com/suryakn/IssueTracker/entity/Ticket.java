@@ -19,8 +19,9 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @Builder
-@NoArgsConstructor
+
 @AllArgsConstructor
+@NoArgsConstructor
 public class Ticket {
     private static final Logger log = LoggerFactory.getLogger(IssueTrackerApplication.class);
     @Id
@@ -38,14 +39,16 @@ public class Ticket {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket")
 //    @JsonManagedReference
     private List<Comment> comments;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assigned_to_id")
     private UserEntity assignedTo;
 
     public Ticket(String title, String description, String status, String priority) {

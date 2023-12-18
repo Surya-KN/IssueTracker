@@ -1,9 +1,7 @@
 package com.suryakn.IssueTracker.service;
 
-import com.suryakn.IssueTracker.dto.AssignRequest;
-import com.suryakn.IssueTracker.dto.CreatedByDto;
-import com.suryakn.IssueTracker.dto.TicketRequest;
-import com.suryakn.IssueTracker.dto.TicketResponse;
+import com.suryakn.IssueTracker.dto.*;
+import com.suryakn.IssueTracker.entity.Comment;
 import com.suryakn.IssueTracker.entity.Ticket;
 import com.suryakn.IssueTracker.entity.UserEntity;
 import com.suryakn.IssueTracker.repository.TicketRepository;
@@ -46,39 +44,57 @@ public class TicketService {
         return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.OK);
     }
 
+    private List<CommentDto> getCommentList(List<Comment> comments) {
+        List<CommentDto> commentString = new ArrayList<>();
+        for (Comment c : comments) {
+            commentString.add(CommentDto.builder().comment(c.getComment()).build());
+        }
+        return commentString;
+    }
+
     private TicketResponse getTicketResponse(Ticket ticket) {
+
+        CreatedByDto assignedTo = null;
+        if (ticket.getAssignedTo() != null) {
+            assignedTo = CreatedByDto.builder()
+                    .firstName(ticket.getAssignedTo().getFirstName())
+                    .lastName(ticket.getAssignedTo().getLastName())
+                    .email(ticket.getAssignedTo().getEmail())
+                    .build();
+        }
+        List<CommentDto> commentDtos = null;
+
+        if (ticket.getComments() != null) {
+            commentDtos = getCommentList(ticket.getComments());
+        }
         return TicketResponse.builder()
                 .id(ticket.getId())
                 .title(ticket.getTitle())
                 .description(ticket.getDescription())
+                .status(ticket.getStatus())
+                .priority(ticket.getPriority())
                 .createdAt(ticket.getCreatedAt())
                 .modifiedAt(ticket.getModifiedAt())
-                .comments(ticket.getComments())
+                .comments(commentDtos)
                 .created(CreatedByDto.builder()
                         .firstName(ticket.getCreatedBy().getFirstName())
                         .lastName(ticket.getCreatedBy().getLastName())
                         .email(ticket.getCreatedBy().getEmail())
                         .build())
-                .assigned(CreatedByDto.builder()
-                        .firstName(ticket.getCreatedBy().getFirstName())
-                        .lastName(ticket.getCreatedBy().getLastName())
-                        .email(ticket.getCreatedBy().getEmail())
-                        .build())
+                .assigned(assignedTo)
                 .build();
     }
 
     public ResponseEntity<TicketResponse> addTicket(TicketRequest ticketRequest) {
         UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(userEntity);
+//        System.out.println(userEntity);
         Ticket ticket = Ticket.builder()
                 .title(ticketRequest.getTitle())
                 .description(ticketRequest.getDescription())
                 .status(ticketRequest.getStatus())
                 .priority(ticketRequest.getPriority())
                 .createdBy(userEntity)
-                .assignedTo(null)
                 .build();
-//        newTicket.setUser(userEntity);
         ticketRepository.save(ticket);
         return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.CREATED);
     }
@@ -100,7 +116,7 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-    public void assignTicker(Long ticketId, AssignRequest assignRequest) {
+    public void assignTicket(Long ticketId, AssignRequest assignRequest) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
         Optional<UserEntity> user = userRepository.findByEmail(assignRequest.getEmail());
         if (optionalTicket.isEmpty() || user.isEmpty()) {

@@ -1,6 +1,6 @@
 package com.suryakn.IssueTracker.controller;
 
-import com.suryakn.IssueTracker.entity.Comment;
+import com.suryakn.IssueTracker.dto.CommentDto;
 import com.suryakn.IssueTracker.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<List<Comment>> all(@PathVariable Long ticketId) {
+    public ResponseEntity<List<CommentDto>> all(@PathVariable Long ticketId) {
         return commentService.getAllComments(ticketId);
     }
 
     @PostMapping
-    public ResponseEntity<Comment> saveComment(@PathVariable Long ticketId, @RequestBody Map<String, String> body) {
+    public ResponseEntity<CommentDto> saveComment(@PathVariable Long ticketId, @RequestBody Map<String, String> body) {
         return commentService.addComment(ticketId, body);
     }
 
