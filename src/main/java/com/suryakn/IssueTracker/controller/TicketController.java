@@ -1,6 +1,5 @@
 package com.suryakn.IssueTracker.controller;
 
-import com.suryakn.IssueTracker.entity.Ticket;
 import com.suryakn.IssueTracker.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +15,25 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping
-    public ResponseEntity<List<Ticket>> all() {
+    public ResponseEntity<List<TicketResponse>> all() {
         return ticketService.getAllTickets();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Ticket> ticketWithId(@PathVariable Long id) {
+    public ResponseEntity<TicketResponse> ticketWithId(@PathVariable Long id) {
         return ticketService.getTicketById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> addTicket(@RequestBody Ticket newTicket) {
+    public ResponseEntity<TicketResponse> addTicket(@RequestBody TicketRequest newTicket) {
 //        newTicket.setCreated_at(LocalDateTime.now());
 //        newTicket.setModified_at(LocalDateTime.now());
         return ticketService.addTicket(newTicket);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Ticket> replaceTicket(@RequestBody Ticket newTicket, @PathVariable Long id) {
-        return ticketService.updateTicket(newTicket, id);
+    public ResponseEntity<TicketResponse> replaceTicket(@RequestBody TicketRequest ticketRequest, @PathVariable Long id) {
+        return ticketService.updateTicket(ticketRequest, id);
 
     }
 
