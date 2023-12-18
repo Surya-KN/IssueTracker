@@ -2,11 +2,13 @@ package com.suryakn.IssueTracker.service;
 
 import com.suryakn.IssueTracker.entity.Comment;
 import com.suryakn.IssueTracker.entity.Ticket;
+import com.suryakn.IssueTracker.entity.UserEntity;
 import com.suryakn.IssueTracker.repository.CommentRepository;
 import com.suryakn.IssueTracker.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,9 @@ public class CommentService {
         Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
         return optionalTicket.map(ticket -> {
             Comment comment = new Comment(body.get("comment"), ticket);
+            UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            System.out.println(userEntity);
+            comment.setUser(userEntity);
             Comment savedComment = commentRepository.save(comment);
             return new ResponseEntity<>(savedComment, HttpStatus.CREATED);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
