@@ -1,4 +1,4 @@
-package com.suryakn.IssueTracker.auth;
+package com.suryakn.IssueTracker.auth.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

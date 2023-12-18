@@ -1,5 +1,8 @@
 package com.suryakn.IssueTracker.auth;
 
+import com.suryakn.IssueTracker.auth.dtos.AuthenticateRequest;
+import com.suryakn.IssueTracker.auth.dtos.AuthenticationResponse;
+import com.suryakn.IssueTracker.auth.dtos.RegisterRequest;
 import com.suryakn.IssueTracker.config.JwtService;
 import com.suryakn.IssueTracker.entity.Role;
 import com.suryakn.IssueTracker.entity.UserEntity;

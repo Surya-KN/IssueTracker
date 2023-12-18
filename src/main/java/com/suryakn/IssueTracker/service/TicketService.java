@@ -1,10 +1,13 @@
 package com.suryakn.IssueTracker.service;
 
-import com.suryakn.IssueTracker.controller.TicketRequest;
-import com.suryakn.IssueTracker.controller.TicketResponse;
+import com.suryakn.IssueTracker.dto.AssignRequest;
+import com.suryakn.IssueTracker.dto.CreatedByDto;
+import com.suryakn.IssueTracker.dto.TicketRequest;
+import com.suryakn.IssueTracker.dto.TicketResponse;
 import com.suryakn.IssueTracker.entity.Ticket;
 import com.suryakn.IssueTracker.entity.UserEntity;
 import com.suryakn.IssueTracker.repository.TicketRepository;
+import com.suryakn.IssueTracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ public class TicketService {
 
 
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 //    private final TicketMapper ticketMapper;
 
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
@@ -50,9 +54,16 @@ public class TicketService {
                 .createdAt(ticket.getCreatedAt())
                 .modifiedAt(ticket.getModifiedAt())
                 .comments(ticket.getComments())
-                .firstName(ticket.getUser().getFirstName())
-                .lastName(ticket.getUser().getFirstName())
-                .email(ticket.getUser().getEmail())
+                .created(CreatedByDto.builder()
+                        .firstName(ticket.getCreatedBy().getFirstName())
+                        .lastName(ticket.getCreatedBy().getLastName())
+                        .email(ticket.getCreatedBy().getEmail())
+                        .build())
+                .assigned(CreatedByDto.builder()
+                        .firstName(ticket.getCreatedBy().getFirstName())
+                        .lastName(ticket.getCreatedBy().getLastName())
+                        .email(ticket.getCreatedBy().getEmail())
+                        .build())
                 .build();
     }
 
@@ -64,10 +75,12 @@ public class TicketService {
                 .description(ticketRequest.getDescription())
                 .status(ticketRequest.getStatus())
                 .priority(ticketRequest.getPriority())
-                .user(userEntity)
+                .createdBy(userEntity)
+                .assignedTo(null)
                 .build();
 //        newTicket.setUser(userEntity);
-        return new ResponseEntity<>(getTicketResponse(ticketRepository.save(ticket)), HttpStatus.CREATED);
+        ticketRepository.save(ticket);
+        return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.CREATED);
     }
 
     public ResponseEntity<TicketResponse> updateTicket(TicketRequest ticketRequest, Long id) {
@@ -78,11 +91,23 @@ public class TicketService {
             ticket.setDescription(ticketRequest.getDescription());
             ticket.setPriority(ticketRequest.getPriority());
             //            ticket.setModified_at(LocalDateTime.now());
+            ticketRepository.save(ticket);
             return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public void deleteTicket(Long id) {
         ticketRepository.deleteById(id);
+    }
+
+    public void assignTicker(Long ticketId, AssignRequest assignRequest) {
+        Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
+        Optional<UserEntity> user = userRepository.findByEmail(assignRequest.getEmail());
+        if (optionalTicket.isEmpty() || user.isEmpty()) {
+            System.out.println("not found");
+            return;
+        }
+        optionalTicket.get().setAssignedTo(user.get());
+        ticketRepository.save(optionalTicket.get());
     }
 }

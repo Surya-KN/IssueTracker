@@ -1,4 +1,4 @@
-package com.suryakn.IssueTracker.controller;
+package com.suryakn.IssueTracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

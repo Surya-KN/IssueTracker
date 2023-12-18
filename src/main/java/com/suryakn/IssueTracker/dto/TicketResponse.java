@@ -1,4 +1,4 @@
-package com.suryakn.IssueTracker.controller;
+package com.suryakn.IssueTracker.dto;
 
 import com.suryakn.IssueTracker.entity.Comment;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,7 @@ public class TicketResponse {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<Comment> comments;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private CreatedByDto created;
+    private CreatedByDto assigned;
 
 }

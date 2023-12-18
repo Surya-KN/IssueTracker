@@ -1,5 +1,8 @@
 package com.suryakn.IssueTracker.controller;
 
+import com.suryakn.IssueTracker.dto.AssignRequest;
+import com.suryakn.IssueTracker.dto.TicketRequest;
+import com.suryakn.IssueTracker.dto.TicketResponse;
 import com.suryakn.IssueTracker.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,11 @@ public class TicketController {
         return ticketService.getTicketById(id);
     }
 
+    @PostMapping("{ticketId}/assign")
+    public void assignTicket(@PathVariable Long ticketId, @RequestBody AssignRequest assignRequest) {
+        ticketService.assignTicker(ticketId, assignRequest);
+    }
+
     @PostMapping
     public ResponseEntity<TicketResponse> addTicket(@RequestBody TicketRequest newTicket) {
 //        newTicket.setCreated_at(LocalDateTime.now());
@@ -32,6 +40,7 @@ public class TicketController {
     }
 
     @PutMapping("{id}")
+
     public ResponseEntity<TicketResponse> replaceTicket(@RequestBody TicketRequest ticketRequest, @PathVariable Long id) {
         return ticketService.updateTicket(ticketRequest, id);
 

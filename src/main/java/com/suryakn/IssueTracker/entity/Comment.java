@@ -1,6 +1,5 @@
 package com.suryakn.IssueTracker.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +20,8 @@ public class Comment {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "ticketid", referencedColumnName = "id", nullable = false)
-    @JsonBackReference
+//    @JoinColumn(name = "ticketid", referencedColumnName = "id", nullable = false)
+//    @JsonBackReference
     private Ticket ticket;
 
     //    @ManyToOne(fetch = FetchType.EAGER)

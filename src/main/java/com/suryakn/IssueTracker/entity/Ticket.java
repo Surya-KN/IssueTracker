@@ -1,6 +1,5 @@
 package com.suryakn.IssueTracker.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.suryakn.IssueTracker.IssueTrackerApplication;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,12 +38,15 @@ public class Ticket {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private List<Comment> comments;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private UserEntity user;
+    private UserEntity createdBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserEntity assignedTo;
 
     public Ticket(String title, String description, String status, String priority) {
         this.title = title;
