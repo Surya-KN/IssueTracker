@@ -41,7 +41,49 @@ public class TicketService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Ticket ticket = optionalTicket.get();
-        return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.OK);
+        return ResponseEntity.ok(getTicketResponse(ticket));
+    }
+
+    public ResponseEntity<TicketResponse> addTicket(TicketRequest ticketRequest) {
+        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userEntity);
+        Ticket ticket = Ticket.builder()
+                .title(ticketRequest.getTitle())
+                .description(ticketRequest.getDescription())
+                .status(ticketRequest.getStatus())
+                .priority(ticketRequest.getPriority())
+                .createdBy(userEntity)
+                .build();
+        ticketRepository.save(ticket);
+        return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<TicketResponse> updateTicket(TicketRequest ticketRequest, Long id) {
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        return optionalTicket.map(ticket -> {
+            ticket.setTitle(ticketRequest.getTitle());
+            ticket.setStatus(ticketRequest.getStatus());
+            ticket.setDescription(ticketRequest.getDescription());
+            ticket.setPriority(ticketRequest.getPriority());
+            //            ticket.setModified_at(LocalDateTime.now());
+            ticketRepository.save(ticket);
+            return ResponseEntity.ok(getTicketResponse(ticket));
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    public void deleteTicket(Long id) {
+        ticketRepository.deleteById(id);
+    }
+
+    public void assignTicket(Long ticketId, AssignRequest assignRequest) {
+        Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
+        Optional<UserEntity> user = userRepository.findByEmail(assignRequest.getEmail());
+        if (optionalTicket.isEmpty() || user.isEmpty()) {
+            System.out.println("not found");
+            return;
+        }
+        optionalTicket.get().setAssignedTo(user.get());
+        ticketRepository.save(optionalTicket.get());
     }
 
     private List<CommentDto> getCommentList(List<Comment> comments) {
@@ -83,47 +125,5 @@ public class TicketService {
                         .build())
                 .assigned(assignedTo)
                 .build();
-    }
-
-    public ResponseEntity<TicketResponse> addTicket(TicketRequest ticketRequest) {
-        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        System.out.println(userEntity);
-        Ticket ticket = Ticket.builder()
-                .title(ticketRequest.getTitle())
-                .description(ticketRequest.getDescription())
-                .status(ticketRequest.getStatus())
-                .priority(ticketRequest.getPriority())
-                .createdBy(userEntity)
-                .build();
-        ticketRepository.save(ticket);
-        return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<TicketResponse> updateTicket(TicketRequest ticketRequest, Long id) {
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        return optionalTicket.map(ticket -> {
-            ticket.setTitle(ticketRequest.getTitle());
-            ticket.setStatus(ticketRequest.getStatus());
-            ticket.setDescription(ticketRequest.getDescription());
-            ticket.setPriority(ticketRequest.getPriority());
-            //            ticket.setModified_at(LocalDateTime.now());
-            ticketRepository.save(ticket);
-            return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    public void deleteTicket(Long id) {
-        ticketRepository.deleteById(id);
-    }
-
-    public void assignTicket(Long ticketId, AssignRequest assignRequest) {
-        Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
-        Optional<UserEntity> user = userRepository.findByEmail(assignRequest.getEmail());
-        if (optionalTicket.isEmpty() || user.isEmpty()) {
-            System.out.println("not found");
-            return;
-        }
-        optionalTicket.get().setAssignedTo(user.get());
-        ticketRepository.save(optionalTicket.get());
     }
 }

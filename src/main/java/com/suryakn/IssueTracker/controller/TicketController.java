@@ -27,11 +27,6 @@ public class TicketController {
         return ticketService.getTicketById(id);
     }
 
-    @PostMapping("{ticketId}/assign")
-    public void assignTicket(@PathVariable Long ticketId, @RequestBody AssignRequest assignRequest) {
-        ticketService.assignTicket(ticketId, assignRequest);
-    }
-
     @PostMapping
     public ResponseEntity<TicketResponse> addTicket(@RequestBody TicketRequest newTicket) {
 //        newTicket.setCreated_at(LocalDateTime.now());
@@ -40,10 +35,13 @@ public class TicketController {
     }
 
     @PutMapping("{id}")
-
     public ResponseEntity<TicketResponse> replaceTicket(@RequestBody TicketRequest ticketRequest, @PathVariable Long id) {
         return ticketService.updateTicket(ticketRequest, id);
+    }
 
+    @PostMapping("{ticketId}/assign")
+    public void assignTicket(@PathVariable Long ticketId, @RequestBody AssignRequest assignRequest) {
+        ticketService.assignTicket(ticketId, assignRequest);
     }
 
     //    @PatchMapping("/{id}") TODO: if possible
