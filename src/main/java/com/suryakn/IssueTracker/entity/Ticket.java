@@ -19,7 +19,6 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @Builder
-
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ticket {
@@ -27,10 +26,13 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
+
+    @Lob
     private String description;
-    private String status;
-    private String priority;
+    private Status status;
+    private Priority priority;
 
     //    @Column(name = "created_at")
     @CreatedDate
@@ -39,7 +41,7 @@ public class Ticket {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
 //    @JsonManagedReference
     private List<Comment> comments;
 
@@ -51,7 +53,11 @@ public class Ticket {
     @JoinColumn(name = "assigned_to_id")
     private UserEntity assignedTo;
 
-    public Ticket(String title, String description, String status, String priority) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    public Ticket(String title, String description, Status status, Priority priority) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -59,4 +65,3 @@ public class Ticket {
     }
 
 }
-

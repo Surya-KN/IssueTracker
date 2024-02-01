@@ -13,6 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,7 +35,15 @@ public class SecurityConfiguration {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()));
+                .cors(c ->
+                        c.configurationSource(request -> {
+                            CorsConfiguration corsConfiguration = new CorsConfiguration();
+                            corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
+                            corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+                            return corsConfiguration;
+                        }));
         return httpSecurity.build();
     }
+
 }

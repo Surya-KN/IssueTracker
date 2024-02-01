@@ -19,16 +19,7 @@ public class Comment {
 
     private String comment;
 
-    //    @ManyToOne
-////    @JoinColumn(name = "ticketid", referencedColumnName = "id", nullable = false)
-////    @JsonBackReference
-//    private Ticket ticket;
-//
-//    //    @ManyToOne(fetch = FetchType.EAGER)
-////    @JoinColumn
-////    private UserEntity user;
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    private UserEntity user;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;

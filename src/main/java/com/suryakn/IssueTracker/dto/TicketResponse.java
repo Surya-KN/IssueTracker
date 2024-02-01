@@ -1,5 +1,7 @@
 package com.suryakn.IssueTracker.dto;
 
+import com.suryakn.IssueTracker.entity.Priority;
+import com.suryakn.IssueTracker.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +18,13 @@ public class TicketResponse {
     private Long id;
     private String title;
     private String description;
-    private String status;
-    private String priority;
+    private Status status;
+    private Priority priority;
     private List<CommentDto> comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private CreatedByDto created;
     private CreatedByDto assigned;
+    private ProjectDto project;
 
 }

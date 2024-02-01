@@ -27,6 +27,7 @@ public class TicketController {
         return ticketService.getTicketById(id);
     }
 
+
     @PostMapping
     public ResponseEntity<TicketResponse> addTicket(@RequestBody TicketRequest newTicket) {
 //        newTicket.setCreated_at(LocalDateTime.now());
@@ -34,7 +35,7 @@ public class TicketController {
         return ticketService.addTicket(newTicket);
     }
 
-    @PutMapping("{id}")
+    @PostMapping("{id}")
     public ResponseEntity<TicketResponse> replaceTicket(@RequestBody TicketRequest ticketRequest, @PathVariable Long id) {
         return ticketService.updateTicket(ticketRequest, id);
     }
