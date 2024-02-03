@@ -29,10 +29,12 @@ public class Ticket {
 
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Status status;
     private Priority priority;
+    @Column(columnDefinition = "TEXT")
+    private String vector;
 
     //    @Column(name = "created_at")
     @CreatedDate
@@ -56,6 +58,7 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project;
+
 
     public Ticket(String title, String description, Status status, Priority priority) {
         this.title = title;

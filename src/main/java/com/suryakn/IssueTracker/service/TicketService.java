@@ -1,12 +1,17 @@
 package com.suryakn.IssueTracker.service;
 
 import com.suryakn.IssueTracker.dto.*;
+import com.suryakn.IssueTracker.duplicate.DuplicateTicketRequest;
+import com.suryakn.IssueTracker.duplicate.DuplicateTicketService;
+import com.suryakn.IssueTracker.duplicate.PythonResponse;
 import com.suryakn.IssueTracker.entity.Comment;
 import com.suryakn.IssueTracker.entity.Ticket;
 import com.suryakn.IssueTracker.entity.UserEntity;
+import com.suryakn.IssueTracker.entity.VectorTable;
 import com.suryakn.IssueTracker.repository.ProjectRepository;
 import com.suryakn.IssueTracker.repository.TicketRepository;
 import com.suryakn.IssueTracker.repository.UserRepository;
+import com.suryakn.IssueTracker.repository.VectorTableRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +30,10 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-//    private final TicketMapper ticketMapper;
+    private final DuplicateTicketService duplicateTicketService;
+    private final VectorTableRepository vectorTableRepository;
 
+    //    private final TicketMapper ticketMapper;
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
         List<TicketResponse> ticketResponses = new ArrayList<>();
@@ -35,7 +42,6 @@ public class TicketService {
         }
         return ResponseEntity.ok(ticketResponses);
     }
-
 
     public ResponseEntity<TicketResponse> getTicketById(Long id) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
@@ -46,6 +52,7 @@ public class TicketService {
         return ResponseEntity.ok(getTicketResponse(ticket));
     }
 
+
     public ResponseEntity<TicketResponse> addTicket(TicketRequest ticketRequest) {
 //        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(userEntity);
@@ -53,6 +60,22 @@ public class TicketService {
         UserEntity assignee = userRepository.findByEmail(ticketRequest.getAssignee()).orElseThrow();
         System.out.println(ticketRequest);
 
+        /////////////////////////
+        DuplicateTicketRequest duplicateTicketRequest = DuplicateTicketRequest.builder().ticketId(2000L)
+                .title(ticketRequest.getTitle())
+                .description(ticketRequest.getDescription())
+                .projectId(ticketRequest.getProject())
+                .build();
+
+        PythonResponse pythonResponse = duplicateTicketService.processTicketEmbedding(duplicateTicketRequest);
+        List<Long> ids = pythonResponse.getSimilar_ticket_ids();
+        List<Ticket> similarTicketList = new ArrayList<>();
+        for (Long id : ids) {
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            ticketOptional.ifPresent(similarTicketList::add);
+        }
+        System.out.println(pythonResponse.getVector());
+        //////////////////////////////////
         Ticket ticket = Ticket.builder()
                 .title(ticketRequest.getTitle())
                 .description(ticketRequest.getDescription())
@@ -62,8 +85,15 @@ public class TicketService {
                 .assignedTo(assignee)
                 .project(projectRepository.findById(ticketRequest.getProject()).orElseThrow())
                 .build();
-        ticketRepository.save(ticket);
-        return new ResponseEntity<>(getTicketResponse(ticket), HttpStatus.CREATED);
+//        ticket.setVector(pythonResponse.getVector());
+        Ticket newTicket = ticketRepository.save(ticket);
+        TicketResponse ticketResponse = getTicketResponse(newTicket, similarTicketList);
+        addVectorTable(pythonResponse.getVector(), newTicket.getId(), ticketRequest.getProject());
+        return new ResponseEntity<>(ticketResponse, HttpStatus.CREATED);
+    }
+
+    public void addVectorTable(String vector, Long ticketId, Long projectId) {
+        vectorTableRepository.save(VectorTable.builder().vector(vector).ticketId(ticketId).projectId(projectId).build());
     }
 
     public ResponseEntity<TicketResponse> updateTicket(TicketRequest ticketRequest, Long id) {
@@ -120,6 +150,41 @@ public class TicketService {
         return commentString;
     }
 
+    private TicketResponse getTicketResponse(Ticket ticket, List<Ticket> ticketList) {
+
+        CreatedByDto assignedTo = null;
+        if (ticket.getAssignedTo() != null) {
+            assignedTo = CreatedByDto.builder()
+                    .firstName(ticket.getAssignedTo().getFirstName())
+                    .lastName(ticket.getAssignedTo().getLastName())
+                    .email(ticket.getAssignedTo().getEmail())
+                    .build();
+        }
+        List<CommentDto> commentDtos = null;
+
+        if (ticket.getComments() != null) {
+            commentDtos = getCommentList(ticket.getComments());
+        }
+        return TicketResponse.builder()
+                .id(ticket.getId())
+                .title(ticket.getTitle())
+                .description(ticket.getDescription())
+                .status(ticket.getStatus())
+                .priority(ticket.getPriority())
+                .createdAt(ticket.getCreatedAt())
+                .modifiedAt(ticket.getModifiedAt())
+                .comments(commentDtos)
+                .created(CreatedByDto.builder()
+                        .firstName(ticket.getCreatedBy().getFirstName())
+                        .lastName(ticket.getCreatedBy().getLastName())
+                        .email(ticket.getCreatedBy().getEmail())
+                        .build())
+                .assigned(assignedTo)
+                .project(new ProjectDto(ticket.getProject()))
+                .similarTickets(ticketList)
+                .build();
+    }
+
     private TicketResponse getTicketResponse(Ticket ticket) {
 
         CreatedByDto assignedTo = null;
@@ -172,4 +237,20 @@ public class TicketService {
         Ticket ticket = optionalTicket.get();
         return ResponseEntity.ok(getTicketResponse(ticket));
     }
+
+//    public List<Ticket> getDuplicates(TicketRequest ticketRequest) {
+//        DuplicateTicketRequest duplicateTicketRequest = DuplicateTicketRequest.builder().ticketId(2000L)
+//                .title(ticketRequest.getTitle())
+//                .description(ticketRequest.getDescription())
+//                .projectId(ticketRequest.getProject())
+//                .build();
+//
+//        PythonResponse pythonResponse = duplicateTicketService.processTicketEmbedding(duplicateTicketRequest);
+//        List<Long> ids = pythonResponse.getSimilar_ticket_ids();
+//        List<Ticket> similarTicketList = new ArrayList<>();
+//        for (Long id : ids) {
+//            similarTicketList.add(ticketRepository.findById(id).orElseThrow());
+//        }
+//        return similarTicketList;
+//    }
 }
