@@ -89,6 +89,7 @@ public class TicketService {
         Ticket newTicket = ticketRepository.save(ticket);
         TicketResponse ticketResponse = getTicketResponse(newTicket, similarTicketList);
         addVectorTable(pythonResponse.getVector(), newTicket.getId(), ticketRequest.getProject());
+//        System.out.println(ticketResponse);
         return new ResponseEntity<>(ticketResponse, HttpStatus.CREATED);
     }
 
@@ -120,8 +121,10 @@ public class TicketService {
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
     public void deleteTicket(Long id) {
         ticketRepository.deleteById(id);
+        vectorTableRepository.deleteByTicketId(id);
     }
 
     public void assignTicket(Long ticketId, AssignRequest assignRequest) {
@@ -151,7 +154,14 @@ public class TicketService {
     }
 
     private TicketResponse getTicketResponse(Ticket ticket, List<Ticket> ticketList) {
-
+        List<SimilarTickets> similarTicketList = new ArrayList<>();
+        for (Ticket ticket1 : ticketList) {
+            similarTicketList.add(SimilarTickets.builder()
+                    .id(ticket1.getId())
+                    .title(ticket1.getTitle()).build()
+            );
+        }
+        System.out.println(similarTicketList);
         CreatedByDto assignedTo = null;
         if (ticket.getAssignedTo() != null) {
             assignedTo = CreatedByDto.builder()
@@ -181,7 +191,7 @@ public class TicketService {
                         .build())
                 .assigned(assignedTo)
                 .project(new ProjectDto(ticket.getProject()))
-                .similarTickets(ticketList)
+                .similarTickets(similarTicketList)
                 .build();
     }
 

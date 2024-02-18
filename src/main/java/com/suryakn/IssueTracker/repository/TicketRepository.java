@@ -10,6 +10,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findAllByProjectId(Long pid);
 
     Optional<Ticket> findByProjectIdAndId(Long pid, Long tid);
+
     //    List<Ticket> findByTitle(String title);
 
 }

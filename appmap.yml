@@ -1,0 +1,4 @@
+name: "IssueTracker"
+appmap_dir: "tmp/appmap"
+packages:
+- path: "com.suryakn.IssueTracker"

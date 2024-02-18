@@ -2,7 +2,6 @@ package com.suryakn.IssueTracker.dto;
 
 import com.suryakn.IssueTracker.entity.Priority;
 import com.suryakn.IssueTracker.entity.Status;
-import com.suryakn.IssueTracker.entity.Ticket;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +27,6 @@ public class TicketResponse {
     private CreatedByDto assigned;
     private ProjectDto project;
 
-    private List<Ticket> similarTickets;
+    private List<SimilarTickets> similarTickets;
 
 }
