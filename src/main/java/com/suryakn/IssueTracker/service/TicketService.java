@@ -130,7 +130,7 @@ public class TicketService {
     public void assignTicket(Long ticketId, AssignRequest assignRequest) {
 
         Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
-        if (assignRequest.getEmail().equals("")) {
+        if (assignRequest.getEmail().isEmpty()) {
             optionalTicket.get().setAssignedTo(null);
             System.out.println("ok");
             return;
