@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> saveComment(@PathVariable Long ticketId, @RequestBody Map<String, String> body) {
+    public ResponseEntity<CommentDto> saveComment(@PathVariable Long ticketId, @RequestBody CommentDto body) {
         return commentService.addComment(ticketId, body);
     }
 

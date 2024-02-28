@@ -47,7 +47,7 @@ public class Ticket {
 //    @JsonManagedReference
     private List<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;
 
@@ -58,7 +58,6 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project;
-
 
     public Ticket(String title, String description, Status status, Priority priority) {
         this.title = title;
