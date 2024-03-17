@@ -320,8 +320,13 @@ export default function CreateTicketBody({ key }: { key: number }) {
         </label>
       </div>
       {isLoading && (
-        <div className="flex h-screen items-center justify-center">
-          <progress className="progress w-56"></progress>
+        <div className="flex items-center justify-center">
+          <div className="p-3">
+            <span className="font-bold">Looking for Duplicates</span>
+          </div>
+          <div>
+            <progress className="progress w-56"></progress>
+          </div>
         </div>
       )}
       {similarTickets &&
