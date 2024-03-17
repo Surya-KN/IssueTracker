@@ -72,13 +72,13 @@ export default function NavBar() {
               </svg>
             </label>
           </div>
-          <div className="form-control mx-1">
+          {/* <div className="form-control mx-1">
             <input
               type="text"
               placeholder="Search"
               className="input input-bordered w-24 md:w-auto"
             />
-          </div>
+          </div> */}
           <div className="dropdown dropdown-end mx-1">
             <div
               tabIndex={0}
