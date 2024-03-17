@@ -40,6 +40,7 @@ export default function CreateTicketBody({ key }: { key: number }) {
   const [users, setUsers] = useState<User[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [similarTickets, setSimilarTickets] = useState<similarTicket[]>([]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [newIssue, setNewIssue] = useState<IssueType>({
