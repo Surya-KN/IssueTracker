@@ -3,6 +3,8 @@ package com.suryakn.IssueTracker.duplicate;
 import com.suryakn.IssueTracker.entity.VectorTable;
 import com.suryakn.IssueTracker.repository.VectorTableRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +21,9 @@ public class DuplicateTicketService {
     private final VectorTableRepository ticketRepository;
     private final RestTemplate restTemplate;
 
+    @Value("${duplicateservice.url}")
+    private String duplicateServiceUrl;
+
     public PythonResponse processTicketEmbedding(DuplicateTicketRequest duplicateTicketRequest) {
         String text = duplicateTicketRequest.getTitle() + " " + duplicateTicketRequest.getDescription();
 
@@ -26,7 +31,8 @@ public class DuplicateTicketService {
         List<TicketEmbeddingDTO> ticketEmbeddingDTOS = new ArrayList<>();
         for (VectorTable ticket : ticketList) {
 
-            ticketEmbeddingDTOS.add(TicketEmbeddingDTO.builder().ticketId(ticket.getTicketId()).vector(ticket.getVector()).build());
+            ticketEmbeddingDTOS.add(
+                    TicketEmbeddingDTO.builder().ticketId(ticket.getTicketId()).vector(ticket.getVector()).build());
         }
 
         HttpHeaders headers = new HttpHeaders();
@@ -38,7 +44,6 @@ public class DuplicateTicketService {
                 .build(),
                 headers);
 
-
-        return restTemplate.postForObject("http://127.0.0.1:5000" + "/process_ticket", request, PythonResponse.class);
+        return restTemplate.postForObject(duplicateServiceUrl + "/process_ticket", request, PythonResponse.class);
     }
 }

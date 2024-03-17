@@ -1,0 +1,9 @@
+flask
+beautifulsoup4
+flask-cors
+torch --index-url https://download.pytorch.org/whl/cpu 
+waitress
+scikit-learn
+nltk
+lxml
+sentence-transformers 
