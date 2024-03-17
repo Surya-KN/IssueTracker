@@ -40,6 +40,7 @@ export default function CreateTicketBody({ key }: { key: number }) {
   const [users, setUsers] = useState<User[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [similarTickets, setSimilarTickets] = useState<similarTicket[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [newIssue, setNewIssue] = useState<IssueType>({
     project: "",
@@ -70,6 +71,7 @@ export default function CreateTicketBody({ key }: { key: number }) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     console.log(newIssue);
+    setIsLoading(true);
     await axios
       .post(`https://${config.apiUrl}/api/tickets`, {
         project: newIssue.project,
@@ -84,6 +86,7 @@ export default function CreateTicketBody({ key }: { key: number }) {
       })
       .then((res) => {
         console.log(res);
+        setIsLoading(false);
         if (res.data.similarTickets && res.data.similarTickets.length > 0) {
           setSimilarTickets(res.data.similarTickets);
           toast.warning("Similar tickets found");
@@ -91,7 +94,10 @@ export default function CreateTicketBody({ key }: { key: number }) {
         mutate("ticket");
         toast.success("Ticket created with id " + res.data.id);
       })
-      .catch((err) => window.alert(err));
+      .catch((err) => {
+        setIsLoading(false);
+        window.alert(err);
+      });
   }
 
   function clearCreate(e: any) {
@@ -313,7 +319,11 @@ export default function CreateTicketBody({ key }: { key: number }) {
           </select>
         </label>
       </div>
-
+      {isLoading && (
+        <div className="flex h-screen items-center justify-center">
+          <progress className="progress w-56"></progress>
+        </div>
+      )}
       {similarTickets &&
         similarTickets.length > 0 &&
         (console.log(similarTickets),
