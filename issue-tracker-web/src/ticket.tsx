@@ -9,7 +9,7 @@ import config from "./config";
 export function Ticket({ id: propid }: { id?: number }) {
   const { id: paramid } = useParams();
   const id = propid ?? paramid;
-  const url = `http://${config.apiUrl}/api/tickets/${id}`;
+  const url = `https://${config.apiUrl}/api/tickets/${id}`;
   const key = `ticket${id}`;
 
   const fetcher = (url: string) => {

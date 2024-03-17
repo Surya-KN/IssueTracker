@@ -21,7 +21,7 @@ export function TicketBody({ ticket }: TicketBodyProps) {
   const [comments, setComments] = useState(ticket?.comments);
   function handleSubmit() {
     axios
-      .post(`http://${config.apiUrl}/api/tickets/${ticket?.id}`, {
+      .post(`https://${config.apiUrl}/api/tickets/${ticket?.id}`, {
         description: editorValue,
       })
       .then(() => {
@@ -37,13 +37,13 @@ export function TicketBody({ ticket }: TicketBodyProps) {
 
   function addComment(e: string) {
     axios
-      .post(`http://${config.apiUrl}/api/tickets/${ticket?.id}/comments`, {
+      .post(`https://${config.apiUrl}/api/tickets/${ticket?.id}/comments`, {
         comment: e,
         email: auth?.email,
       })
       .then(() => {
         axios
-          .get(`http://${config.apiUrl}/api/tickets/${ticket?.id}/comments`)
+          .get(`https://${config.apiUrl}/api/tickets/${ticket?.id}/comments`)
           .then((res) => {
             setComments(res.data);
           });

@@ -11,7 +11,7 @@ interface TicketListProps {
 
 export default function TicketList({ project }: TicketListProps) {
   const { id, name } = project;
-  const url = `http://${config.apiUrl}/api/projects/${id}/tickets`;
+  const url = `https://${config.apiUrl}/api/projects/${id}/tickets`;
   const key = `ticket`;
 
   const fetcher = (url: string) => {
@@ -30,7 +30,7 @@ export default function TicketList({ project }: TicketListProps) {
 
   function handledelete(e: any) {
     if (window.confirm("Are you sure you want to delete this ticket?")) {
-      axios.delete(`http://${config.apiUrl}/api/tickets/${e}`).then(() => {
+      axios.delete(`https://${config.apiUrl}/api/tickets/${e}`).then(() => {
         toast.success("Ticket deleted successfully");
         mutate("ticket");
       });
@@ -52,7 +52,7 @@ export default function TicketList({ project }: TicketListProps) {
     );
 
   // function deleteTicket(id: number) {
-  //   axios.delete(`http://${config.apiUrl}/api/tickets/${id}`).then((res) => {
+  //   axios.delete(`https://${config.apiUrl}/api/tickets/${id}`).then((res) => {
   //     console.log(res);
   //   });
   // }

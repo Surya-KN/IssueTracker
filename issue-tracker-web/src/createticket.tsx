@@ -54,12 +54,14 @@ export default function CreateTicketBody({ key }: { key: number }) {
   });
 
   useEffect(() => {
-    axios.get(`http://${config.apiUrl}/api/users`).then((res: AxiosResponse) => {
-      setUsers(res.data);
-    });
+    axios
+      .get(`https://${config.apiUrl}/api/users`)
+      .then((res: AxiosResponse) => {
+        setUsers(res.data);
+      });
 
     axios
-      .get(`http://${config.apiUrl}/api/projects`)
+      .get(`https://${config.apiUrl}/api/projects`)
       .then((res: AxiosResponse) => {
         setProjects(res.data);
       });
@@ -69,7 +71,7 @@ export default function CreateTicketBody({ key }: { key: number }) {
     e.preventDefault();
     console.log(newIssue);
     await axios
-      .post(`http://${config.apiUrl}/api/tickets`, {
+      .post(`https://${config.apiUrl}/api/tickets`, {
         project: newIssue.project,
         title: newIssue.title,
         description: newIssue.description,

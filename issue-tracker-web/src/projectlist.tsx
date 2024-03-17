@@ -37,14 +37,14 @@ export default function ProjectList() {
     );
 
   //   function deleteproject(id: number) {
-  //     axios.delete(`http://${config.apiUrl}/api/projects/${id}`).then((res) => {
+  //     axios.delete(`https://${config.apiUrl}/api/projects/${id}`).then((res) => {
   //       console.log(res);
   //     });
   //   }
   function handledelete(id: number) {
     if (window.confirm("Are you sure you want to delete this project?")) {
       axios
-        .delete(`http://${config.apiUrl}/api/projects/${id}`)
+        .delete(`https://${config.apiUrl}/api/projects/${id}`)
         .then(() => {
           mutate("project");
           toast.success("Project deleted successfully");
