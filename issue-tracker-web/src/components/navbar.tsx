@@ -106,7 +106,7 @@ export default function NavBar() {
                 <a>Settings</a>
               </li>
               <li>
-                <Link to="/login">Logout</Link>s
+                <Link to="/login">Logout</Link>
               </li>
             </ul>
           </div>
