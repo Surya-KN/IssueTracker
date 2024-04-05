@@ -18,7 +18,7 @@ export function TicketDetails({ ticket }: TicketBodyProps) {
 
   useEffect(() => {
     axios
-      .get(`https://${config.apiUrl}/api/users`)
+      .get(`${config.apiUrl}/api/users`)
       .then((res: AxiosResponse) => {
         setUsers(res.data);
       });
@@ -27,7 +27,7 @@ export function TicketDetails({ ticket }: TicketBodyProps) {
   function updateAssigned(e: React.ChangeEvent<HTMLSelectElement>) {
     setAssigned(e.target.value);
     axios
-      .post(`https://${config.apiUrl}/api/tickets/${ticket?.id}/assign`, {
+      .post(`${config.apiUrl}/api/tickets/${ticket?.id}/assign`, {
         email: e.target.value,
       })
       .then(() => {
@@ -40,7 +40,7 @@ export function TicketDetails({ ticket }: TicketBodyProps) {
   function updateStatus(e: React.ChangeEvent<HTMLSelectElement>) {
     setStatus(e.target.value);
     axios
-      .post(`https://${config.apiUrl}/api/tickets/${ticket?.id}`, {
+      .post(`${config.apiUrl}/api/tickets/${ticket?.id}`, {
         status: e.target.value,
       })
       .then(() => {
@@ -53,7 +53,7 @@ export function TicketDetails({ ticket }: TicketBodyProps) {
   function updatePriority(e: React.ChangeEvent<HTMLSelectElement>) {
     setPriority(e.target.value);
     axios
-      .post(`https://${config.apiUrl}/api/tickets/${ticket?.id}`, {
+      .post(`${config.apiUrl}/api/tickets/${ticket?.id}`, {
         priority: e.target.value,
       })
       .then(() => {

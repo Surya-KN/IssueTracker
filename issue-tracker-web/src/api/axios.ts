@@ -1,7 +1,8 @@
 import axios from "axios";
+import config from "../config";
 
 export default axios.create({
-  baseURL: "https://issuetracker-backend-ks3h.onrender.com/api",
+  baseURL: `${config.apiUrl}/api`,
   headers: {
     "Content-Type": "application/json",
   },

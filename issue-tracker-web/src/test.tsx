@@ -11,7 +11,7 @@ export default function Testing() {
   const [project, setProject] = useState<Project>();
 
   useEffect(() => {
-    axios.get(`https://${config.apiUrl}/api/projects/${pid}`).then((res) => {
+    axios.get(`${config.apiUrl}/api/projects/${pid}`).then((res) => {
       setProject(res.data);
     });
   }, []); // Empty dependency array to ensure the API call is made only once

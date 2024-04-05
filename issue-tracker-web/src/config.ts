@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: "issuetracker-backend-ks3h.onrender.com",
+  apiUrl: "https://issuetracker.sunkn.tech",
 };
 
 export default config;

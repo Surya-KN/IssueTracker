@@ -19,7 +19,7 @@ export default function AddProjectButton() {
   function handleSubmit(e: any) {
     e.preventDefault();
     axios
-      .post(`https://${config.apiUrl}/api/projects`, {
+      .post(`${config.apiUrl}/api/projects`, {
         name: projectName,
       })
       .then((res) => {

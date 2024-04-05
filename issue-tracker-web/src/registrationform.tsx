@@ -15,7 +15,7 @@ function Registrationform() {
     e.preventDefault();
     console.log(firstName, password, email);
     await axios
-      .post(`https://${config.apiUrl}/api/auth/register`, {
+      .post(`${config.apiUrl}/api/auth/register`, {
         firstName: firstName,
         lastName: lastName,
         password: password,
