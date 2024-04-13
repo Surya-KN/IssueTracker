@@ -36,3 +36,4 @@ build/
 tmp/
 *.log
 duplicate-detection/dupenv
+appmap.yml
