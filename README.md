@@ -1,7 +1,7 @@
 
 # Issue Tracker
 
-This is a simple issue tracker application. It consists of a frontend built with react, backend built with Spring Boot and detects duplicate using cosine similarity and scentence embeddings.
+This is a simple issue tracker application. It consists of a frontend built with react, backend built with Spring Boot and detects duplicate tickets using cosine similarity and scentence embeddings.
 
 ![](https://app.eraser.io/workspace/qaqSO5QauKiSdVBXIyIt/preview?elements=Zs6tVZdpC96ByCCAIYpChQ&type=embed)
 
