@@ -25,7 +25,7 @@ export default function CreateButton() {
         Create
       </button>
       <dialog id="my_modal_5" className="modal ">
-        <div className="modal-box w-11/12 max-w-5xl ">
+        <div className="modal-box w-11/12 max-w-5xl  ">
           <h3 className="text-lg font-bold">Create</h3>
           <CreateTicketBody key={key} />
         </div>

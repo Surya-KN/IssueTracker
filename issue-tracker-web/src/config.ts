@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: "https://issuetracker.sunkn.tech",
+  apiUrl: "http://localhost:6969",
 };
 
 export default config;

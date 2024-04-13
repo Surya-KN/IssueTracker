@@ -11,6 +11,7 @@ import RequireAuth from "./requireauth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Themes from "./components/themes";
+import Home from "./Home";
 
 export default function App() {
   // const navigate = useNavigate();
@@ -36,7 +37,8 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/projects" replace />} />
+          {/* <Route index element={<Navigate to="/projects" replace />} /> */}
+          <Route index element={<Home/>} />
           <Route path="/projects" element={<ProjectList />} />
           <Route path="/register" element={<Registrationform />} />
           <Route path="/login" element={<Loginform />} />
