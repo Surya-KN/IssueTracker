@@ -70,6 +70,6 @@ def process_ticket():
 if __name__ == "__main__":
     app.run()
 
-#   .\dupenv\bin\Activate.ps1
-#  python .\dup.py    
+# .\dupenv\bin\Activate.ps1
+# python .\dup.py    
 # waitress-serve --listen=*:5000 dup:app

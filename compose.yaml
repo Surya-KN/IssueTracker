@@ -1,7 +1,9 @@
 services:
   frontend:
     build: issue-tracker-web
-    image: suryakn/issuetracker-frontend:aws
+    image: suryakn/issuetracker-frontend
+    # args:
+      # - VITE_API_URL=http://backend:6969
     ports:
       - 5173:5173
     depends_on:
@@ -13,11 +15,12 @@ services:
     ports:
       - 6969:6969
     environment:
-      - POSTGRES_DB=issue_tracker_db_p9iq
-      - POSTGRES_URL=jdbc:postgresql://dpg-cnrf74cf7o1s73cngt7g-a.singapore-postgres.render.com/issue_tracker_db_p9iq
-      - DUPLICATE_SERVICE_URL=https://issuetracker-duplication-service.onrender.com
-      - DATABASE_USER=issue_tracker_db_p9iq_user
-      - DATABSE_PASSWORD=RyU35tw3zS6mdQSTa2YsgBdnSq8mQbtN
+      - POSTGRES_DB=issue_tracker_db
+      - POSTGRES_URL=jdbc:postgresql://db:5432/issue_tracker_db
+      - DUPLICATE_SERVICE_URL=http://duplication-service:5000
+      - DATABASE_USER=postgres
+      - DATABSE_PASSWORD=postgres
+      # - JWT_SECRET= 
     networks:
       - issue-tracker
 
