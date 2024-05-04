@@ -21,6 +21,11 @@ cd IssueTracker
 ```bash
 docker-compose up --build
 ```
+or pull from the repository
+```bash
+docker-compose pull
+docker-compose up
+```
 
 The frontend will be available at `http://localhost:5173` and the backend will be available at `http://localhost:6969`.
 
