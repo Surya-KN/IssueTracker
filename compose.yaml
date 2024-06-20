@@ -1,9 +1,7 @@
 services:
   frontend:
     build: issue-tracker-web
-    image: suryakn/issuetracker-frontend
-    # args:
-      # - VITE_API_URL=http://backend:6969
+    image: suryakn/issuetracker-frontend:aws
     ports:
       - 5173:5173
     depends_on:
