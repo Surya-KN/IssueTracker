@@ -1,13 +1,13 @@
 
 # Issue Tracker
 
-This is a simple issue tracker application. It consists of a frontend built with react, backend built with Spring Boot and detects duplicate tickets using cosine similarity and scentence embeddings.
+A simple issue tracker application to track, manage, assign issues. Backend built with Spring Boot, Frontend is built with react and detects duplicate tickets using NLP techniques like cosine similarity and scentence embeddings.
 
-![](https://app.eraser.io/workspace/qaqSO5QauKiSdVBXIyIt/preview?elements=Zs6tVZdpC96ByCCAIYpChQ&type=embed)
+![diagram-export-19-5-2024-5_13_04-pm](https://github.com/Surya-KN/IssueTracker/assets/95220715/0c2ef80c-6f32-409c-9e86-ba292c6e0cda)
 
 ## Getting Started
 
-To get started with this project, you need to have Docker and Docker Compose installed on your machine.
+To get started with this project easily, you need to have Docker and Docker Compose installed on your machine.
 
 1. Clone the repository:
 
@@ -20,6 +20,11 @@ cd IssueTracker
 
 ```bash
 docker-compose up --build
+```
+or pull from the repository
+```bash
+docker-compose pull
+docker-compose up
 ```
 
 The frontend will be available at `http://localhost:5173` and the backend will be available at `http://localhost:6969`.
